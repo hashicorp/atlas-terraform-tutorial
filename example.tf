@@ -32,10 +32,10 @@ resource "aws_subnet" "main" {
 # Instance
 #--------------------------------------------------------------
 resource "aws_instance" "main" {
-    instance_type = "t1.micro"
+    instance_type = "t2.micro"
 
     # Trusty 14.04
-    ami = "ami-10b68a78"
+    ami = "ami-ecb68a84"
 
     # This will create 1 instances
     count = 1
