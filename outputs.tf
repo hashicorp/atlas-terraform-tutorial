@@ -1,3 +1,3 @@
 output "address" {
-    value = "Instance available: `ping ${aws_instance.web.public_dns}`"
+    value = "Instance available: `telnet ${aws_instance.main.public_ip} 5000`"
 }

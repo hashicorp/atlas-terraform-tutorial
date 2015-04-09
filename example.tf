@@ -1,33 +1,44 @@
-resource "aws_security_group" "allow_all" {
-  name = "allow_all"
-  description = "Allow all inbound traffic"
+#--------------------------------------------------------------
+# Security groups
+#--------------------------------------------------------------
+resource "aws_network_acl" "main" {
+  vpc_id = "${aws_vpc.main.id}"
 
-  # Allow TCP traffic
   ingress {
-      from_port = 0
-      to_port = 65535
       protocol = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow pings
-  ingress {
+      rule_no = 5000
+      action = "allow"
+      cidr_block =  "0.0.0.0/0"
       from_port = 0
       to_port = 1
-      protocol = "icmp"
-      cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 
-resource "aws_instance" "web" {
-    instance_type = "t2.micro"
+#--------------------------------------------------------------
+# VPC
+#--------------------------------------------------------------
+resource "aws_vpc" "main" {
+    cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "main" {
+    vpc_id = "${aws_vpc.main.id}"
+    cidr_block = "10.0.1.0/24"
+    map_public_ip_on_launch = true
+}
+
+#--------------------------------------------------------------
+# Instance
+#--------------------------------------------------------------
+resource "aws_instance" "main" {
+    instance_type = "t1.micro"
 
     # Trusty 14.04
     ami = "ami-10b68a78"
 
-    security_groups = ["${aws_security_group.allow_all.name}"]
-
     # This will create 1 instances
     count = 1
+
+    subnet_id = "${aws_subnet.main.id}"
 }
