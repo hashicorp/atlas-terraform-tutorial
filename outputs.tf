@@ -1,3 +1,3 @@
 output "address" {
-    value = "Instance available: `telnet ${aws_instance.main.public_ip} 5000`"
+    value = "Go to `${aws_instance.main.public_ip}` to view the deployed instance. It may take a minute or two for the instance to provision"
 }
