@@ -2,10 +2,19 @@ resource "aws_security_group" "allow_all" {
   name = "allow_all"
   description = "Allow all inbound traffic"
 
+  # Allow TCP traffic
   ingress {
       from_port = 0
       to_port = 65535
-      protocol = "-1"
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow pings
+  ingress {
+      from_port = 0
+      to_port = 1
+      protocol = "icmp"
       cidr_blocks = ["0.0.0.0/0"]
   }
 }
