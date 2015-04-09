@@ -21,9 +21,4 @@ resource "aws_instance" "web" {
 
     # This will create 1 instances
     count = 1
-
-    # Ensures that we have
-    lifecycle = {
-      create_before_destroy = true
-    }
 }
