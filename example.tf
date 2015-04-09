@@ -1,31 +1,16 @@
 #--------------------------------------------------------------
-# ACLs
+# Security Group
 #--------------------------------------------------------------
-resource "aws_network_acl" "main" {
-  vpc_id = "${aws_vpc.main.id}"
+resource "aws_security_group" "allow_all" {
+  name = "allow_all"
+  description = "Allow all inbound traffic"
 
   ingress {
-      protocol = "tcp"
-      rule_no = 1
-      action = "allow"
-      cidr_block =  "0.0.0.0/0"
-      from_port = 5000
-      to_port = 5000
+      from_port = 0
+      to_port = 65535
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
-
-#--------------------------------------------------------------
-# VPC
-#--------------------------------------------------------------
-resource "aws_vpc" "main" {
-    cidr_block = "10.0.0.0/16"
-}
-
-resource "aws_subnet" "main" {
-    vpc_id = "${aws_vpc.main.id}"
-    cidr_block = "10.0.1.0/24"
-    map_public_ip_on_launch = true
 }
 
 #--------------------------------------------------------------
@@ -35,10 +20,10 @@ resource "aws_instance" "main" {
     instance_type = "t2.micro"
 
     # Trusty 14.04
-    ami = "ami-ecb68a84"
+    ami = "ami-2a734c42"
 
     # This will create 1 instances
     count = 1
 
-    subnet_id = "${aws_subnet.main.id}"
+    security_groups = ["${aws_security_group.allow_all.name}"]
 }
